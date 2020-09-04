@@ -12,12 +12,13 @@ namespace ConsoleApp4 {
     /// <summary>
     /// 用于支持有理数运算
     /// </summary>
+    using NumberType = System.Int64;
     public struct RationalNumber {
         /// <summary>
         ///  分子
         /// </summary>
-        private int numerator;
-        public int Numerator {
+        private NumberType numerator;
+        public NumberType Numerator {
             get {
                 return this.numerator;
             }
@@ -28,8 +29,8 @@ namespace ConsoleApp4 {
         /// <summary>
         /// 分母，不能为0
         /// </summary>
-        private int denominator;
-        public int Denominator {
+        private NumberType denominator;
+        public NumberType Denominator {
             get {
                 return this.denominator;
             }
@@ -53,7 +54,7 @@ namespace ConsoleApp4 {
         /// </summary>
         /// <param name="numerator">分子</param>
         /// <param name="denominator">分母，不能为0</param>
-        public RationalNumber(int numerator, int denominator) {
+        public RationalNumber(NumberType numerator, NumberType denominator) {
             this.numerator = numerator;
             this.denominator = denominator;
         }
@@ -66,10 +67,13 @@ namespace ConsoleApp4 {
             this.numerator = 1;
             this.denominator = 1;
             try {
-                int numerator = int.Parse(t[0]);
-                int denominator = int.Parse(t[1]);
-                if (denominator == 0) {
-                    throw new ArgumentException("分母不能为0");
+                NumberType numerator = NumberType.Parse(t[0]);
+                NumberType denominator = 1;
+                if (t.Length >= 2) {
+                    denominator = NumberType.Parse(t[1]);
+                    if (denominator == 0) {
+                        throw new ArgumentException("分母不能为0");
+                    }
                 }
                 this.Numerator = numerator;
                 this.Denominator = denominator;
@@ -83,9 +87,9 @@ namespace ConsoleApp4 {
         /// </summary>
         /// <returns>分数的最简化形式</returns>
         public RationalNumber Simplify() {
-            int gcd = GetGCD(this.Numerator, this.Denominator);
-            int numerator = this.Numerator / gcd;
-            int denominator = this.Denominator / gcd;
+            NumberType gcd = GetGCD(this.Numerator, this.Denominator);
+            NumberType numerator = this.Numerator / gcd;
+            NumberType denominator = this.Denominator / gcd;
             return new RationalNumber() { Numerator = numerator, Denominator = denominator };
         }
         /// <summary>
@@ -103,7 +107,7 @@ namespace ConsoleApp4 {
         /// <param name="number"></param>
         /// <returns></returns>
         public static RationalNumber operator -(RationalNumber number) {
-            int numerator = -number.Numerator;
+            NumberType numerator = -number.Numerator;
             return new RationalNumber(numerator, number.Denominator);
         }
         /// <summary>
@@ -113,8 +117,8 @@ namespace ConsoleApp4 {
         /// <param name="numB"></param>
         /// <returns></returns>
         public static RationalNumber operator +(RationalNumber numA, RationalNumber numB) {
-            int numerator = numA.Numerator * numB.Denominator + numA.Denominator * numB.Numerator;
-            int denominator = numA.Denominator * numB.Denominator;
+            NumberType numerator = numA.Numerator * numB.Denominator + numA.Denominator * numB.Numerator;
+            NumberType denominator = numA.Denominator * numB.Denominator;
             return new RationalNumber() { Numerator = numerator, Denominator = denominator }.Simplify();
         }
         /// <summary>
@@ -134,8 +138,8 @@ namespace ConsoleApp4 {
         /// <param name="numB"></param>
         /// <returns></returns>
         public static RationalNumber operator *(RationalNumber numA, RationalNumber numB) {
-            int numberator = numA.Numerator * numB.Numerator;
-            int denominator = numA.Denominator * numB.Denominator;
+            NumberType numberator = numA.Numerator * numB.Numerator;
+            NumberType denominator = numA.Denominator * numB.Denominator;
             return new RationalNumber() { Numerator = numberator, Denominator = denominator }.Simplify();
         }
         /// <summary>
@@ -178,8 +182,8 @@ namespace ConsoleApp4 {
         /// <param name="numB"></param>
         /// <returns></returns>
         public static bool operator <(RationalNumber numA, RationalNumber numB) {
-            int a = numA.Numerator * numB.Denominator;
-            int b = numB.Numerator * numA.denominator;
+            NumberType a = numA.Numerator * numB.Denominator;
+            NumberType b = numB.Numerator * numA.denominator;
             return a < b;
 
         }
@@ -199,8 +203,8 @@ namespace ConsoleApp4 {
         /// <param name="numB"></param>
         /// <returns></returns>
         public static bool operator >(RationalNumber numA, RationalNumber numB) {
-            int a = numA.Numerator * numB.Denominator;
-            int b = numB.Numerator * numA.Denominator;
+            NumberType a = numA.Numerator * numB.Denominator;
+            NumberType b = numB.Numerator * numA.Denominator;
             return a > b;
         }
         /// <summary>
@@ -234,9 +238,9 @@ namespace ConsoleApp4 {
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        private static int GetGCD(int a, int b) {
+        private static NumberType GetGCD(NumberType a, NumberType b) {
             do {
-                int t = b;
+                NumberType t = b;
                 b = a % b;
                 a = t;
             } while (b != 0);
